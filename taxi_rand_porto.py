@@ -8,6 +8,7 @@ import datetime
 import csv
 from postgis import Polygon,MultiPolygon
 from postgis.psycopg import register
+import taxi_tracks
 
 def polygon_to_points(polygon_string):
     xs, ys = [],[]
@@ -34,14 +35,14 @@ def points_list_to_points(points_list):
 scale=1/30000
 
 con = psycopg2.connect("dbname=postgres user=postgres")
+cursor_psql = con.cursor()
 register(con)
 
 sql ="""
-        select st_astext(st_envelope(st_collect(proj_boundary)))
+        select st_astext(st_envelope(st_collect(st_simplify(proj_boundary,100,FALSE))))
         from cont_aad_caop2018
         where concelho='PORTO'
      """
-cursor_psql = con.cursor()
 cursor_psql.execute(sql)
 results = cursor_psql.fetchall()
 
@@ -54,9 +55,9 @@ fig = plt.figure(figsize=(width_in_inches*scale,height_in_inches*scale))
 
 # Plot freguesias of Porto
 sql ="""
-        select st_astext(proj_boundary)
+        select st_astext(st_simplify(proj_boundary,100,False))
         from cont_aad_caop2018
-        where concelho='PORTO';
+        where distrito in ('PORTO');
      """
 
 cursor_psql.execute(sql)
@@ -71,7 +72,7 @@ for row in results:
 sql = """
         select st_astext(st_pointn(tr.proj_track,1))
         from tracks as tr, cont_aad_caop2018 as caop
-        where caop.concelho='PORTO' and
+        where caop.distrito='PORTO' and
               st_within(st_pointn(tr.proj_track,1), caop.proj_boundary) and
               tr.state='BUSY';
       """
@@ -82,5 +83,6 @@ results = cursor_psql.fetchall()
 xs, ys = points_list_to_points(results)
 
 i=random.randint(0,len(xs))
+plt.scatter(xs,ys,s=5,color='green')
 plt.scatter(xs[i],ys[i],s=5,color='red')
 plt.show()
