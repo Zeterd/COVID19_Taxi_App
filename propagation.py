@@ -11,6 +11,7 @@ import random
 import pandas as pd
 import queue 
 import time
+from heapq import heappush, heappop
 
 
 start_time = time.time()
@@ -131,6 +132,8 @@ id_taxi_lisboa = taxi_id[int(taxi_lisboa)]
 infetados = queue.Queue(maxsize=1660) 
 infetados.put(id_taxi_porto)   
 infetados.put(id_taxi_lisboa)
+visitados[id_taxi_porto] = 1
+visitados[id_taxi_lisboa] = 1
 
 
 offsets = []
@@ -148,38 +151,40 @@ with open('offsets3.csv', 'r') as csvFile:
         offsets.append(l)
 
 
-
-
 #começa no zero 
-conta = 0
-while infetados.empty() != True:
-    flag_3 = 0
-    if infetados.qsize() >=2:
-        taxi_1 = infetados.get()
-        taxi_2 = infetados.get()
-        conta = conta + 2
-    else:
-        taxi_1 = infetados.get()
-        flag_3 = 1
-    
+infetados = 0
+t_infetados = []
+final_anim = []
+ts_taxi = {}
+heap = []
+flag_1 = 0
+
+#ts_taxi[id_taxi_porto] = 0
+#ts_taxi[id_taxi_lisboa] = 0
+
+heappush(heap,(0,id_taxi_porto))
+heappush(heap,(0,id_taxi_lisboa))
+
+t_infetados.append(2)
+
+while len(heap)>0:
     print("SIZE")
-    print(infetados.qsize()) 
-    for i in range(0,len(offsets),6):
+    print(len(heap))
+
+    a = heappop(heap)
+    print("Taxi: " + str(a))
+    taxi_1 = a[1]
+    ts_i = a[0] # Para saber o ts em que foi infetado, pois só apartir daí é que importa 
+    #print(ts_i)
+    for i in range(ts_i,len(offsets),6):
         p1 = []
         p1 = offsets[i][taxi_1]
         x_p1 = p1[0]
         y_p1 = p1[1]
             
-        p3 = []
-
-        p3 = offsets[i][taxi_2]
-        x_p3 = p3[0]
-        y_p3 = p3[1]
-
         #print(taxi_1)
+        #anim = [0] * 1660  
         for j in range(1660):
-            flag_1 = 0
-            flag_2 = 0
             #print(offsets[i][6]) # Imprime os ts da coluna 6 
             #print(offsets[1][j]) #Imprime o ts de cada taxi po ts
             
@@ -189,37 +194,31 @@ while infetados.empty() != True:
             x_p2 = p2[0]
             y_p2 = p2[1]
 
-          
+        
             if ((x_p1 == 0) and (y_p1 == 0)) or ((x_p2 == 0) and (y_p2 == 0)) or (math.dist(p1,p2)>50) or (visitados[j]==1) or (taxi_1==j):
-                flag_1 = 1;
+                continue;
             
-            
-            if ((x_p3 == 0) and (y_p3 == 0)) or ((x_p2 == 0) and (y_p2 == 0)) or (math.dist(p3,p2)>50) or (visitados[j]==1) or (taxi_2==j):
-                flag_2 = 1
-     
                 
             else:
-                if (flag_1 == 0 and flag_2 == 1) or (flag_1 == 0 and flag_2==0):
-                    #distance = math.dist(p1,p2) 
-                    #print(distance)
-                    prob = random.randint(1,10)
-                    if prob == 1:
-                        print("entrei")
-                        infetados.put(j)
-                        visitados[j] = 1
-                elif  flag_1 == 1 and flag_2 == 0:
-                    #distance = math.dist(p3,p2) 
-                    #print(distance)
-                    prob = random.randint(1,10)
-                    if prob == 1:
-                        print("entrei")
-                        infetados.put(j)
-                        visitados[j] = 1
-                
+                prob = random.randint(1,10)
+                if prob == 1:
+                    visitados[j] = 1
+                    heappush(heap, (i,j))
+                    infetados = infetados + 1
+                    flag_1=1
+                    #anim[j] = 1
+    if flag_1==1:                
+        t_infetados.append(infetados)
+        flag_1=0       
 
 
-print("Conta " + str(conta))      
+#with open('anim .csv', 'w', newline='') as file:
+#    writer = csv.writer(file)
+#    writer.writerows(final_anim)
 
+
+print("Conta " + str(infetados))      
+print(t_infetados)
 
 
 print("--- %s seconds ---" % (time.time() - start_time))
