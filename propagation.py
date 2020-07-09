@@ -177,12 +177,14 @@ while len(heap)>0:
     taxi_1 = a[1]
     ts_i = a[0] # Para saber o ts em que foi infetado, pois só apartir daí é que importa 
     #print(ts_i)
+    for k in range(ts_i,len(offsets)):
+        anim[k][taxi_1] = 1
+
     for i in range(ts_i,len(offsets),6):
         p1 = []
         p1 = offsets[i][taxi_1]
         x_p1 = p1[0]
         y_p1 = p1[1]
-            
         #print(taxi_1)
         #anim = [0] * 1660  
         for j in range(1660):
