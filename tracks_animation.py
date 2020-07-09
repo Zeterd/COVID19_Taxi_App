@@ -86,6 +86,17 @@ with open('offsets3.csv', 'r') as csvFile:
             l.append([x,y])
         offsets.append(l)
 
+anim_offsets[]
+
+with open('anim.csv', 'r') as anim:
+    reader = csv.reader(anim)
+    i = 0
+    for row in reader:
+        l = []
+        for j in row:
+            x = int(j)
+            l.append([x])
+        anim_offsets.append(l)
 
 x,y = [],[]
 for i in offsets[0]:
