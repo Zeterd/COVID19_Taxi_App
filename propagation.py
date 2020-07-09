@@ -153,19 +153,20 @@ with open('offsets3.csv', 'r') as csvFile:
 
 #começa no zero 
 infetados = 0
-t_infetados = []
-final_anim = []
-ts_taxi = {}
+t_infetados = [0] * len(offsets)
+anim = [[0 for count in range(1660)] for i in range(len(offsets))]
 heap = []
 flag_1 = 0
+conta = 2
 
-#ts_taxi[id_taxi_porto] = 0
-#ts_taxi[id_taxi_lisboa] = 0
 
 heappush(heap,(0,id_taxi_porto))
 heappush(heap,(0,id_taxi_lisboa))
 
-t_infetados.append(2)
+anim[0][id_taxi_porto] = 1
+anim[0][id_taxi_lisboa] = 1
+
+t_infetados[0] = 2
 
 while len(heap)>0:
     print("SIZE")
@@ -205,21 +206,45 @@ while len(heap)>0:
                     visitados[j] = 1
                     heappush(heap, (i,j))
                     infetados = infetados + 1
+                    conta = conta + 1
                     flag_1=1
-                    #anim[j] = 1
-    if flag_1==1:                
-        t_infetados.append(infetados)
-        flag_1=0       
+                    anim[i][j] = 1
+
+        if flag_1==1:                
+            t_infetados[i] = t_infetados[i] + infetados
+            flag_1=0   
+
+        infetados = 0    
 
 
-#with open('anim .csv', 'w', newline='') as file:
-#    writer = csv.writer(file)
-#    writer.writerows(final_anim)
+with open('anim.csv', 'w', newline='') as file:
+    writer = csv.writer(file)
+    writer.writerows(anim)
 
 
-print("Conta " + str(infetados))      
-print(t_infetados)
+print("Conta " + str(conta))      
+#print(t_infetados)
 
+total = [0] * 24
+flag = 0
+j = 0
+for i in range (0, len(t_infetados)):
+    if flag < 360:
+        total[j] = total[j] + t_infetados[i]
+        flag = flag + 1
+    
+    elif flag == 360:
+        j = j + 1
+        total[j] = total[j] + t_infetados[i]
+        flag = 0
+
+
+print(total)
+
+
+df=pd.DataFrame({'x': range(0,24), 'y': total })
+plt.plot( 'x', 'y', data=df, color='skyblue', linestyle='-',  marker='o')
+plt.show()
 
 print("--- %s seconds ---" % (time.time() - start_time))
 #i=random.randint(0,len(xs))
