@@ -1,7 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import psycopg2
-import math 
+import math
 from matplotlib.animation import FuncAnimation
 import datetime
 import csv
@@ -57,47 +57,46 @@ xs , ys = [],[]
 for row in results:
     geom = row[1]
     if type(geom) is MultiPolygon:
-        for pol in geom:            
+        for pol in geom:
             xys = pol[0].coords
             xs, ys = [],[]
             for (x,y) in xys:
-                xs.append(x)                
+                xs.append(x)
                 ys.append(y)
             ax.plot(xs,ys,color='black',lw='0.2')
     if type(geom) is Polygon:
-        xys = geom[0].coords        
+        xys = geom[0].coords
         xs, ys = [],[]
-        for (x,y) in xys:            
-            xs.append(x)            
+        for (x,y) in xys:
+            xs.append(x)
             ys.append(y)
         ax.plot(xs,ys,color='black',lw='0.2')
 
 offsets = []
 
-with open('offsets3.csv', 'r') as csvFile:    
+with open('offsets3.csv', 'r') as csvFile:
     reader = csv.reader(csvFile)
     i = 0
     for row in reader:
         l = []
-        for j in row:            
-            x,y = j.split()            
-            x = float(x)            
-            y= float(y)            
-            l.append([x,y])        
+        for j in row:
+            x,y = j.split()
+            x = float(x)
+            y= float(y)
+            l.append([x,y])
         offsets.append(l)
 
 
-
 x,y = [],[]
-for i in offsets[0]:    
-    x.append(i[0])    
+for i in offsets[0]:
+    x.append(i[0])
     y.append(i[1])
 
 
 ##########################
 
-def animate(i):    
-    ax.set_title(datetime.datetime.utcfromtimestamp(ts_i+i*10))    
+def animate(i):
+    ax.set_title(datetime.datetime.utcfromtimestamp(ts_i+i*10))
     scat.set_offsets(offsets[i])
 
 # Plot all services with origin at Porto
