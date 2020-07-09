@@ -86,7 +86,7 @@ with open('offsets3.csv', 'r') as csvFile:
             l.append([x,y])
         offsets.append(l)
 
-anim_offsets[]
+anim_offsets = []
 
 with open('anim.csv', 'r') as anim:
     reader = csv.reader(anim)
@@ -109,6 +109,7 @@ for i in offsets[0]:
 def animate(i):
     ax.set_title(datetime.datetime.utcfromtimestamp(ts_i+i*10))
     scat.set_offsets(offsets[i])
+    scat.set_color(c[:i])
 
 # Plot all services with origin at Porto
 sql = """
@@ -127,15 +128,15 @@ xs, ys = points_list_to_points(results)
 i=random.randint(0,len(xs))
 j=random.randint(0,len(xs))
 
-print(x)
-print(y)
+#print(x)
+#print(y)
 
-
+c = ["green", "red"]
 ##########
-scat=ax.scatter(xs[i],ys[j],s=5,color='red')
-scat=ax.scatter(x,y,s=2,color='green')
+#scat=ax.scatter(xs[i],ys[j],s=5,color='red')
+scat=ax.scatter(x,y,s=2,color=[c[0]])
 
-print(xs[i])
+#print(xs[i])
 
 anim = FuncAnimation(
     fig, animate, interval=10, frames=len(offsets)-1, repeat = False)
