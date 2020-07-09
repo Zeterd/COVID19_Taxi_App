@@ -94,8 +94,12 @@ with open('anim.csv', 'r') as anim:
     for row in reader:
         l = []
         for j in row:
-            x = int(j)
-            l.append([x])
+            if int(j) == 1:
+                x = "red"
+                l.append(x)
+            else:
+                x = "green"
+                l.append(x)
         anim_offsets.append(l)
 
 x,y = [],[]
@@ -109,7 +113,7 @@ for i in offsets[0]:
 def animate(i):
     ax.set_title(datetime.datetime.utcfromtimestamp(ts_i+i*10))
     scat.set_offsets(offsets[i])
-    scat.set_color(c[:i])
+    scat.set_color(anim_offsets[i])
 
 # Plot all services with origin at Porto
 sql = """
@@ -131,10 +135,9 @@ j=random.randint(0,len(xs))
 #print(x)
 #print(y)
 
-c = ["green", "red"]
+
 ##########
-#scat=ax.scatter(xs[i],ys[j],s=5,color='red')
-scat=ax.scatter(x,y,s=2,color=[c[0]])
+scat=ax.scatter(x,y,s=2,color=[])
 
 #print(xs[i])
 
