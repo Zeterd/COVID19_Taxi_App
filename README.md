@@ -51,7 +51,7 @@ Além da implementação e do uso dos módulos, usou-se uma base de dados [PostG
     Cálculo do gráfico com o número total de infetados por concelho, no distrito do Porto e Lisboa
 
 - anim.csv
-    Ficheiro que contem a informaçao sobre os taxis infetados ou nao infetados
+    Ficheiro que contem a informação sobre os taxis infetados ou não infetados
 
 - lines.py
     Representação dos trajetos dos taxis no mapa com as estradas do distrito do Porto e de Lisboa
