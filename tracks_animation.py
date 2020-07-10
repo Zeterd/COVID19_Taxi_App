@@ -42,13 +42,14 @@ xs_min, xs_max, ys_min, ys_max = -120000, 165000, -310000, 285000
 width_in_inches = (xs_max-xs_min)/0.0254*1.1
 height_in_inches = (ys_max-ys_min)/0.0254*1.1
 
+
 fig, ax = plt.subplots(figsize=(width_in_inches*scale, height_in_inches*scale))
 ax.axis('off')
 ax.set(xlim=(xs_min, xs_max), ylim=(ys_min, ys_max))
 
 cursor_psql = conn.cursor()
 
-sql = "select distrito,st_union(proj_boundary) from cont_aad_caop2018 group by distrito"
+sql = "select concelho,st_union(proj_boundary) from cont_aad_caop2018 group by concelho"
 
 cursor_psql.execute(sql)
 results = cursor_psql.fetchall()
@@ -76,7 +77,6 @@ offsets = []
 
 with open('offsets3.csv', 'r') as csvFile:
     reader = csv.reader(csvFile)
-    i = 0
     for row in reader:
         l = []
         for j in row:
@@ -90,7 +90,6 @@ anim_offsets = []
 
 with open('anim.csv', 'r') as anim:
     reader = csv.reader(anim)
-    i = 0
     for row in reader:
         l = []
         for j in row:
@@ -115,28 +114,7 @@ def animate(i):
     scat.set_offsets(offsets[i])
     scat.set_color(anim_offsets[i])
 
-# Plot all services with origin at Porto
-sql = """
-        select st_astext(st_pointn(tr.proj_track,1))
-        from tracks as tr, cont_aad_caop2018 as caop
-        where caop.concelho='PORTO' and
-              st_within(st_pointn(tr.proj_track,1), caop.proj_boundary) and
-              tr.state='BUSY';
-      """
 
-cursor_psql.execute(sql)
-results = cursor_psql.fetchall()
-
-xs, ys = points_list_to_points(results)
-
-i=random.randint(0,len(xs))
-j=random.randint(0,len(xs))
-
-#print(x)
-#print(y)
-
-
-##########
 scat=ax.scatter(x,y,s=2,color=[])
 
 #print(xs[i])
