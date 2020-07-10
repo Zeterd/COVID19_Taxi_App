@@ -106,9 +106,6 @@ for i in offsets[0]:
     x.append(i[0])
     y.append(i[1])
 
-
-##########################
-
 def animate(i):
     ax.set_title(datetime.datetime.utcfromtimestamp(ts_i+i*10))
     scat.set_offsets(offsets[i])
@@ -116,8 +113,6 @@ def animate(i):
 
 
 scat=ax.scatter(x,y,s=2,color=[])
-
-#print(xs[i])
 
 anim = FuncAnimation(
     fig, animate, interval=10, frames=len(offsets)-1, repeat = False)

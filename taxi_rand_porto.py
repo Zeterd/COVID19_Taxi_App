@@ -68,7 +68,7 @@ for row in results:
     xs, ys = polygon_to_points(polygon_string)
     plt.plot(xs,ys,color='black')
 
-# Plot all services with origin at Porto
+# Traçar todos os serviços com origem no Porto
 sql = """
         select st_astext(st_pointn(tr.proj_track,1))
         from tracks as tr, cont_aad_caop2018 as caop

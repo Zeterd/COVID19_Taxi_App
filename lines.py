@@ -32,32 +32,17 @@ def points_list_to_points(points_list):
         ys.append(float(y))
     return xs, ys
 
-
-
 ts_i = 1570665600
-
-
-#Coimbra
-#center_lon = -23602.1779130802
-#center_lat = 59444.2411470825
 
 #Porto
 center_lon = -41601.3030699869
-center_lat = 165663.59287178 
-
-#Lisboa
-#center_lon = -87973.4688070632
-#center_lat = -103263.891293955
-
-#Sintra
-#center_lon = -108167.564175462
-#center_lat = -95655.0195241774
+center_lat = 165663.59287178
 
 scale=1/30000
 zoom = 10000
 
 plt.style.use('dark_background')
-xs_min, xs_max, ys_min, ys_max = center_lon - zoom, center_lon + zoom, center_lat - zoom, center_lat + zoom 
+xs_min, xs_max, ys_min, ys_max = center_lon - zoom, center_lon + zoom, center_lat - zoom, center_lat + zoom
 width_in_inches = (xs_max-xs_min)/0.0254*1.1
 height_in_inches = (ys_max-ys_min)/0.0254*1.1
 fig, ax = plt.subplots(figsize=(width_in_inches*scale, height_in_inches*scale))
@@ -97,8 +82,6 @@ for track in results:
                 previousy=y
         ax.plot(xxx,yyy,linewidth=0.2,color='white')
 
-#plt.savefig('1.png')
-
 offsets = []
 
 with open('offsets3.csv', 'r') as csvFile:
@@ -134,15 +117,12 @@ for i in offsets[0]:
     x.append(i[0])
     y.append(i[1])
 
-
-##########################
-
 def animate(i):
     ax.set_title(datetime.datetime.utcfromtimestamp(ts_i+i*10))
     scat.set_offsets(offsets[i])
     scat.set_color(anim_offsets[i])
 
-# Plot all services with origin at Porto
+# Mostrar todos os serviços com origem no Porto em taxis ocupados
 sql = """
         select st_astext(st_pointn(tr.proj_track,1))
         from tracks as tr, cont_aad_caop2018 as caop
@@ -159,22 +139,11 @@ xs, ys = points_list_to_points(results)
 i=random.randint(0,len(xs))
 j=random.randint(0,len(xs))
 
-#print(x)
-#print(y)
-
-
-##########
 scat=ax.scatter(x,y,s=5,color=[])
-
-#print(xs[i])
 
 anim = FuncAnimation(
     fig, animate, interval=10, frames=len(offsets)-1, repeat = False)
 
+
 plt.draw()
 plt.show()
-
-
-
-
-

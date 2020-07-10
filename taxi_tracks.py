@@ -1,6 +1,6 @@
 def show_tracks(taxi_id):
 
-    # Calculate figure size
+    # Calcular o tamanho da figura
     sql ="""
             select st_astext(st_envelope(st_collect(st_simplify(proj_boundary,100,FALSE))))
             from cont_aad_caop2018
@@ -18,7 +18,7 @@ def show_tracks(taxi_id):
     fig = plt.figure(figsize=(width_in_inches*scale,height_in_inches*scale))
 
 
-    # Plot all districts
+    # Desenhar todos os distritos
     sql ="""
             select st_astext(st_simplify(proj_boundary,100,False))
             from cont_aad_caop2018

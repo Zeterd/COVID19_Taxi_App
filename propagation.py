@@ -38,14 +38,12 @@ def points_list_to_points(points_list):
         ys.append(float(y))
     return xs, ys
 
-
-
 conn = psycopg2.connect("dbname=postgres user=postgres")
 register(conn)
 cursor_psql = conn.cursor()
 
 
-#Select the first 10 services with origin at Porto
+# Selecionar os primeiros 10 taxis em serviço com origem no Porto
 sql = """
         select taxi, ts
         from tracks as tr, cont_aad_caop2018 as caop
@@ -61,7 +59,7 @@ i = random.randint(0,len(results))
 taxi_porto = results[i-1][0]
 print(taxi_porto)
 
-#Select the first 10 services with origin at Lisboa
+# Selecionar os primeiros 10 taxis em serviço com origem em Lisboa
 sql = """
         select taxi, ts
         from tracks as tr, cont_aad_caop2018 as caop
@@ -76,9 +74,6 @@ results = cursor_psql.fetchall()
 i = random.randint(0,len(results))
 taxi_lisboa = results[i-1][0]
 print(taxi_lisboa)
-
-
-
 
 #Para saber a que coluna corresponde cada taxi no ficheiro offsets
 sql = " select distinct taxi from tracks order by 1"
@@ -105,7 +100,6 @@ id_taxi_lisboa = taxi_id[int(taxi_lisboa)]
 
 
 #Criar queue para saber quais taxis já foram infetados
-
 infetados = queue.Queue(maxsize=1660)
 infetados.put(id_taxi_porto)
 infetados.put(id_taxi_lisboa)
@@ -127,8 +121,6 @@ with open('offsets3.csv', 'r') as csvFile:
             l.append([x,y])
         offsets.append(l)
 
-
-#começa no zero
 infetados = 0
 t_infetados = [0] * len(offsets)
 anim = [[0 for count in range(1660)] for i in range(len(offsets))]
@@ -153,7 +145,6 @@ while len(heap)>0:
     print("Taxi: " + str(a))
     taxi_1 = a[1]
     ts_i = a[0] # Para saber o ts em que foi infetado, pois só apartir daí é que importa
-    #print(ts_i)
     for k in range(ts_i,len(offsets)):
         anim[k][taxi_1] = 1
 
@@ -162,14 +153,8 @@ while len(heap)>0:
         p1 = offsets[i][taxi_1]
         x_p1 = p1[0]
         y_p1 = p1[1]
-        #print(taxi_1)
-        #anim = [0] * 1660
         for j in range(1660):
-            #print(offsets[i][6]) # Imprime os ts da coluna 6
-            #print(offsets[1][j]) #Imprime o ts de cada taxi po ts
-
             p2 = []
-
             p2 = offsets[i][j]
             x_p2 = p2[0]
             y_p2 = p2[1]
@@ -202,7 +187,6 @@ with open('anim.csv', 'w', newline='') as file:
 
 
 print("Conta " + str(conta))
-#print(t_infetados)
 
 total = [0] * 24
 flag = 0
@@ -225,6 +209,4 @@ df=pd.DataFrame({'x': range(0,24), 'y': total })
 plt.plot( 'x', 'y', data=df, color='skyblue', linestyle='-',  marker='o')
 plt.show()
 
-print("--- %s seconds ---" % (time.time() - start_time))
-#i=random.randint(0,len(xs))
-#j=random.randint(0,len(xs))
+print("Duraçao da execuçao: %s" % (time.time() - start_time))

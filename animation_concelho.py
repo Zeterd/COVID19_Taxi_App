@@ -8,8 +8,6 @@ import csv
 from postgis import Polygon,MultiPolygon
 from postgis.psycopg import register
 
-
-
 conn = psycopg2.connect("dbname=postgres user=postgres")
 register(conn)
 cursor_psql = conn.cursor()
@@ -97,7 +95,7 @@ for i in range(len(anim_offsets)):
 
 final = {}
 for i in range(len(dic)):
-    final[dic[i]] = 0 
+    final[dic[i]] = 0
 
 
 for i in range(len(infetados)):
