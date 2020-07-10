@@ -41,3 +41,20 @@ Tambem foram usados varios modulos para a criaçao e visualização da simulaça
     - datetime
 
 Alem da implementaçao e do uso dos modulos, usou-se uma base de dados [PostGreSQL](https://www.postgresql.org/) para obter os dados para o desenho do mapa de Portugal continental e para a representaçao dos trajetos dos taxis
+
+## Sobre cada ficheiro
+
+- propagation.py
+    Calculos de propagaçao epidemiológica
+
+- animation_concelho.py
+    Calculo da imagem mostrada no final da execuçao do numeros de infetados por concelho num grafico de barras
+
+- anim.csv
+    Ficheiro que contem a informaçao sobre os taxis infetados ou nao infetados
+
+- lines.py
+    Representaçao no mapa com as estradas para as animaçoes com os taxis
+
+- tracks_animation
+    Representaçao da simulaçao com o mapa de Portugal Continental com os taxis e os seus trajetos ao longo de 24 horas
