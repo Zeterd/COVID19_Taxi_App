@@ -207,6 +207,7 @@ print(total)
 
 df=pd.DataFrame({'x': range(0,24), 'y': total })
 plt.plot( 'x', 'y', data=df, color='skyblue', linestyle='-',  marker='o')
+plt.savefig('infetados_por_hora.png')
 plt.show()
 
 print("Duraçao da execuçao: %s" % (time.time() - start_time))

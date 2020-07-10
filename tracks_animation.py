@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt
 import psycopg2
 import math
 from matplotlib.animation import FuncAnimation
+import matplotlib.animation as animation
 import datetime
 import csv
 from postgis import Polygon,MultiPolygon
@@ -49,7 +50,7 @@ ax.set(xlim=(xs_min, xs_max), ylim=(ys_min, ys_max))
 
 cursor_psql = conn.cursor()
 
-sql = "select concelho,st_union(proj_boundary) from cont_aad_caop2018 group by concelho"
+sql = "select distrito,st_union(proj_boundary) from cont_aad_caop2018 group by distrito"
 
 cursor_psql.execute(sql)
 results = cursor_psql.fetchall()
@@ -116,6 +117,12 @@ scat=ax.scatter(x,y,s=2,color=[])
 
 anim = FuncAnimation(
     fig, animate, interval=10, frames=len(offsets)-1, repeat = False)
+
+
+Writer = animation.writers['ffmpeg']
+writer = Writer(fps=15, metadata=dict(artist='Me'), bitrate=1800)
+
+anim.save('mapa_covid_distrito.mp4', writer=writer)
 
 plt.draw()
 plt.show()
