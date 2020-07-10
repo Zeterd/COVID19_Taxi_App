@@ -149,5 +149,10 @@ anim = FuncAnimation(
     fig, animate, interval=10, frames=len(offsets)-1, repeat = False)
 
 
+Writer = animation.writers['ffmpeg']
+writer = Writer(fps=15, metadata=dict(artist='Me'), bitrate=1800)
+
+anim.save('mapa_estrada_porto.mp4', writer=writer)
+
 plt.draw()
 plt.show()
