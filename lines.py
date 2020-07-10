@@ -38,6 +38,10 @@ ts_i = 1570665600
 center_lon = -41601.3030699869
 center_lat = 165663.59287178
 
+#Lisboa
+#center_lon = -87973.4688070632
+#center_lat = -103263.891293955
+
 scale=1/30000
 zoom = 10000
 
