@@ -6,9 +6,9 @@ Análise de propagação epidemiológica baseada nos trajectos da tabela tracks 
 
 Este projeto tem os seguintes objetivos:
 
-    1. Representaçao do mapa de Portugal continental
-    2. Representaçao de trajetos de taxis e a sua propagaçao epidemiológica ao longo de 24 horas
-    3. //Acrescentar mais!!
+    - Representaçao do mapa de Portugal continental e dos trajetos de taxis
+    - Calculos de propagaçao epidemiológica ao longo de 24 horas
+    - Otimizaçao da simulaçao
 
 ## Sobre os criadores
 
